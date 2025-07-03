@@ -1,0 +1,41 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+node_modules/
+.pnpm/
+
+# Optional cache
+.cache/
+dist/
+coverage/
+build/
+
+# dotenv environment variables
+.env
+.env.*.local
+
+# Local environment files
+*.local
+
+# IDE files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Others
+*.swp
+*.swo
+*.bak
