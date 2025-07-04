@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shared Shopping List Live Demo</title>
+    <style>
+        
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f7f6; color: #333; }
+        h1, h2, h3 { color: black; }
+        #auth-status, #user-info, #household-section, #list-section {
+            background-color: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input[type="text"], input[type="number"], input[type="email"], input[type="password"] {
+            padding: 10px;
+            margin-right: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1; /* For flexible inputs */
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        button:hover { background-color: #2980b9; }
+        button.delete { background-color: #e74c3c; }
+        button.delete:hover { background-color: #c0392b; }
+        #shopping-list { list-style-type: none; padding: 0; }
+        #shopping-list li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        #shopping-list li:last-child { border-bottom: none; }
+        .purchased { text-decoration: line-through; color: #7f8c8d; }
+        .item-actions { margin-top: 10px; /* Space out buttons */ }
+        small { color: #95a5a6; }
+        .input-group { display: flex; margin-bottom: 10px; }
+        .input-group input { margin-right: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🌟 My Awesome Shared Shopping List 🌟</h1>
+
+    <div id="auth-status">
+        <h2>Your Login Spot</h2>
+        <p id="current-user-email">Not logged in yet...</p>
+        <div class="input-group">
+            <input type="email" id="auth-email" placeholder="Your Email">
+            <input type="password" id="auth-password" placeholder="Your Password">
+            <button id="login-btn">Log Me In!</button>
+            <button id="signup-btn">Sign Me Up!</button>
+            <button id="logout-btn" style="display: none;">Log Out</button>
+        </div>
+    </div>
+
+    <div id="user-info" style="display: none;">
+        <h2>About You</h2>
+        <p>Your unique ID: <span id="user-uid"></span></p>
+        <p>Your Household ID: <span id="user-household-id"></span></p>
+    </div>
+
+    <div id="household-section" style="display: none;">
+        <h2>Your Household Hub</h2>
+        <div id="no-household" style="display: none;">
+            <p>Looks like you're not in a household yet. Let's fix that!</p>
+            <div class="input-group">
+                <input type="text" id="new-household-name" placeholder="Give your new household a name!">
+                <button id="create-household-btn">Create New Household</button>
+            </div>
+            <div class="input-group">
+                <input type="text" id="join-household-id" placeholder="Or paste a Household ID to join">
+                <button id="join-household-btn">Join Existing Household</button>
+            </div>
+        </div>
+        <div id="household-details" style="display: none;">
+            <p>Welcome to: <span id="household-name"></span> (ID: <span id="household-id"></span>)</p>
+            <h3>Who's here?</h3>
+            <ul id="household-members"></ul>
+        </div>
+    </div>
+
+    <div id="list-section" style="display: none;">
+        <h2>Shopping Time! List: <span id="current-list-name"></span></h2>
+        <div class="input-group">
+            <input type="text" id="new-item-name" placeholder="What do you need? (e.g., Avocados)">
+            <input type="number" id="new-item-qty" placeholder="How many?" value="1" min="1">
+            <input type="number" id="new-item-cost" placeholder="Cost in KES?" value="0" min="0">
+            <button id="add-item-btn">Add to List!</button>
+        </div>
+
+        <h3>Your Items:</h3>
+        <ul id="shopping-list"></ul>
+
+        <h3>Cost Breakdown:</h3>
+        <p>💰 Total List Cost: <span id="total-list-cost">0 KES</span></p>
+        <h4>How it Splits:</h4>
+        <ul id="cost-split-details"></ul>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-database-compat.js"></script>
+    <script src="Dbscript.js"></script>
+</body>
+</html>

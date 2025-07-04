@@ -1,0 +1,126 @@
+{
+  "rules": {
+    // Only logged-in people can even look at our database!
+    ".read": "auth != null",
+    ".write": "auth != null",
+
+    "users": {
+      "$uid": {
+        // You can only see and change your own profile data. Fair enough!
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "householdId": {
+          // You can only set your household ID once, or join if you're invited
+          ".validate": "!data.exists() || newData.val() === data.val() || root.child('households').child(newData.val()).child('members').child(auth.uid).exists()"
+        }
+      }
+    },
+
+    "households": {
+      "$householdId": {
+        // You can read/write to a household ONLY if you're listed as a member!
+        ".read": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+        ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+
+        "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "members": {
+          "$memberUid": {
+            ".validate": "$memberUid === auth.uid || root.child('households').child($householdId).child('members').hasChild(auth.uid)"
+          },
+          // You can add new members only if you're already part of the household, or if you're the very first person creating it!
+          ".write": "data.exists() && root.child('households').child($householdId).child('members').hasChild(auth.uid) || !data.exists() && newData.hasChild(auth.uid)"
+        },
+        "currentShoppingListId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+
+        "shoppingLists": {
+          "$listId": {
+            // Lists are protected by the household rules above
+            ".read": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+            ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+
+            "items": {
+              "$itemId": {
+                // Same here: only household members can mess with items!
+                ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+                "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+                "quantity": { ".validate": "newData.isNumber() && newData.val() > 0" },
+                "cost": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+                "purchased": { ".validate": "newData.isBoolean()" },
+                "addedBy": { ".validate": "newData.val() === auth.uid" } // Only *you* can say *you* added it!
+              }
+            },
+            // BIG NOTE: totalCost and costSplit are hands-off for users.
+            // Only our super-secure Cloud Functions can touch these!
+            "totalCost": { ".write": false },
+            "costSplit": { ".write": false }
+          }
+        }
+      }
+    }
+   }
+}
+{
+  "rules": {
+    // Only logged-in people can even look at our database!
+    ".read": "auth != null",
+    ".write": "auth != null",
+
+    "users": {
+      "$uid": {
+        // You can only see and change your own profile data. Fair enough!
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+        "householdId": {
+          // You can only set your household ID once, or join if you're invited
+          ".validate": "!data.exists() || newData.val() === data.val() || root.child('households').child(newData.val()).child('members').child(auth.uid).exists()"
+        }
+      }
+    },
+
+    "households": {
+      "$householdId": {
+        // You can read/write to a household ONLY if you're listed as a member!
+        ".read": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+        ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+
+        "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+        "members": {
+          "$memberUid": {
+            ".validate": "$memberUid === auth.uid || root.child('households').child($householdId).child('members').hasChild(auth.uid)"
+          },
+          // You can add new members only if you're already part of the household, or if you're the very first person creating it!
+          ".write": "data.exists() && root.child('households').child($householdId).child('members').hasChild(auth.uid) || !data.exists() && newData.hasChild(auth.uid)"
+        },
+        "currentShoppingListId": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+
+        "shoppingLists": {
+          "$listId": {
+            // Lists are protected by the household rules above
+            ".read": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+            ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+
+            "items": {
+              "$itemId": {
+                // Same here: only household members can mess with items!
+                ".write": "root.child('households').child($householdId).child('members').hasChild(auth.uid)",
+                "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+                "quantity": { ".validate": "newData.isNumber() && newData.val() > 0" },
+                "cost": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+                "purchased": { ".validate": "newData.isBoolean()" },
+                "addedBy": { ".validate": "newData.val() === auth.uid" } // Only *you* can say *you* added it!
+              }
+            },
+            // BIG NOTE: totalCost and costSplit are hands-off for users.
+            // Only our super-secure Cloud Functions can touch these!
+            "totalCost": { ".write": false },
+            "costSplit": { ".write": false }
+          }
+        }
+      }
+    }
+  }
+}
