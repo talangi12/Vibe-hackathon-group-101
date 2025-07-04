@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShopSplit - Shared Shopping List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="app-header">
+    <h1>🛒 ShopSplit</h1>
+    <p>Shared Shopping List + Smart Cost Splitting</p>
+  </header>
+
+  <main class="app-main">
+
+    <!-- Add Item -->
+    <section class="add-item-section">
+      <input type="text" id="item-name" placeholder="Item Name" />
+      <input type="number" id="item-cost" placeholder="Cost (KES)" step="0.01" min="0" />
+      <button onclick="addItem()">+ Add to List</button>
+    </section>
+
+    <!-- Shopping List -->
+    <section class="shopping-list-section">
+      <ul id="shopping-list"></ul>
+    </section>
+
+    <!-- Members Section -->
+    <section class="members-section">
+      <h3>👥 Split Between</h3>
+      <div id="members-container"></div>
+      <button onclick="addMember()" class="small-btn">+ Add Person</button>
+    </section>
+
+    <!-- Summary -->
+    <section class="summary-section">
+      <div><strong>Total:</strong> KES <span id="total">0.00</span></div>
+      <div><strong>Each Pays:</strong> KES <span id="split">0.00</span></div>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
